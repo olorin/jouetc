@@ -1,0 +1,17 @@
+name:                l1c
+version:             0.1.0.0
+synopsis:            compiler for L1
+license:             MIT
+license-file:        LICENSE
+author:              Sharif Olorin
+maintainer:          sio@tesser.org
+copyright:           2016 Sharif Olorin
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     L1c
+  build-depends:       base >= 3 && < 5
+  default-language:    Haskell2010
