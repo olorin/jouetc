@@ -12,6 +12,6 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     L1c
+  exposed-modules:     Jouet.L1.Grammar
   build-depends:       base >= 3 && < 5
   default-language:    Haskell2010
