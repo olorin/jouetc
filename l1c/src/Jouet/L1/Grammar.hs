@@ -2,7 +2,9 @@
 {-# OPTIONS_GHC -funbox-strict-fields #-}
 
 module Jouet.L1.Grammar (
-    Expr (..)
+    Program (..)
+  , Stmt (..)
+  , Expr (..)
   , Decl (..)
   , Assn (..)
   , Ident (..)
@@ -11,6 +13,16 @@ module Jouet.L1.Grammar (
   ) where
 
 import           Data.ByteString (ByteString)
+
+data Program =
+    Program ![Stmt]
+  deriving (Eq, Show)
+
+data Stmt =
+    DeclS !Decl
+  | AssnS !Assn
+  | ReturnS !Expr
+  deriving (Eq, Show)
 
 data Assn =
     Assn !Ident !AssnOp !Expr
