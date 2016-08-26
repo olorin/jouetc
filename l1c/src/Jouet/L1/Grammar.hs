@@ -3,12 +3,22 @@
 
 module Jouet.L1.Grammar (
     Expr (..)
+  , Decl (..)
+  , Assn (..)
   , Ident (..)
   , AssnOp (..)
   , BinOp (..)
   ) where
 
 import           Data.ByteString (ByteString)
+
+data Assn =
+    Assn !Ident !AssnOp !Expr
+  deriving (Eq, Show)
+
+data Decl =
+    IntDecl !Ident !(Maybe Expr)
+  deriving (Eq, Show)
 
 newtype Ident =
     Ident ByteString
