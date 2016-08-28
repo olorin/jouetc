@@ -13,6 +13,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Jouet.L1.Grammar
+                       Jouet.L1.Parser
   build-depends:       base >= 3 && < 5
                      , attoparsec >= 0.10 && < 0.14
                      , bytestring == 0.10.*
