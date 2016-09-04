@@ -9,6 +9,7 @@ module Jouet.L1.Parser (
   , lvalueP
   , assnP
   , declP
+  , stmtP
   ) where
 
 import           Data.Attoparsec.ByteString (Parser, string)
@@ -20,6 +21,16 @@ import qualified Data.ByteString as BS
 import           Jouet.L1.Grammar
 import           Jouet.L1.Parser.Helper
 import           Jouet.L1.Parser.Predicate
+
+stmtP :: Parser Stmt
+stmtP = withSpace $ stmtP' <* char8 ';'
+
+stmtP' :: Parser Stmt
+stmtP' = withSpace $ AB.choice [
+    DeclS <$> declP
+  , AssnS <$> assnP
+  , ReturnS <$> (withSpace (string "return") *> exprP)
+  ]
 
 declP :: Parser Decl
 declP = withSpace $ AB.choice [
