@@ -14,21 +14,12 @@ module Jouet.L1.Parser (
 import           Data.Attoparsec.ByteString (Parser, string)
 import qualified Data.Attoparsec.ByteString as AB
 import           Data.Attoparsec.ByteString.Char8 (char8, decimal, hexadecimal)
-import qualified Data.Attoparsec.ByteString.Char8 as ABC
 
 import qualified Data.ByteString as BS
 
 import           Jouet.L1.Grammar
+import           Jouet.L1.Parser.Helper
 import           Jouet.L1.Parser.Predicate
-
-withSpace :: Parser a -> Parser a
-withSpace p = ABC.skipSpace *> p <* ABC.skipSpace
-
-withParens :: Parser a -> Parser a
-withParens p =
-     withSpace (char8 '(')
-  *> p
-  <* withSpace (char8 ')')
 
 declP :: Parser Decl
 declP = withSpace $ AB.choice [

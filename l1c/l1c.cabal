@@ -17,6 +17,7 @@ library
 
   exposed-modules:     Jouet.L1.Grammar
                        Jouet.L1.Parser
+                       Jouet.L1.Parser.Helper
                        Jouet.L1.Parser.Predicate
 
   build-depends:       base >= 3 && < 5
