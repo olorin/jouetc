@@ -21,17 +21,17 @@ import           Jouet.L1.Parser.Predicate
 withSpace :: Parser a -> Parser a
 withSpace p = p <* ABC.skipSpace
 
-exprP :: Parser Expr
-exprP = AB.choice [
-    exprParensP
-  , exprP
-  ]
-
-exprParensP :: Parser Expr
-exprParensP = withSpace $
+withParens :: Parser a -> Parser a
+withParens p =
      withSpace (char8 '(')
-  *> exprP'
+  *> p
   <* withSpace (char8 ')')
+
+exprP :: Parser Expr
+exprP = withSpace $ AB.choice [
+    exprP'
+  , withParens exprP'
+  ]
 
 exprP' :: Parser Expr
 exprP' = withSpace $ AB.choice [
