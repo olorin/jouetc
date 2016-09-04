@@ -22,7 +22,19 @@ withSpace :: Parser a -> Parser a
 withSpace p = p <* ABC.skipSpace
 
 exprP :: Parser Expr
-exprP = withSpace $ AB.choice [
+exprP = AB.choice [
+    exprParensP
+  , exprP
+  ]
+
+exprParensP :: Parser Expr
+exprParensP = withSpace $
+     withSpace (char8 '(')
+  *> exprP'
+  <* withSpace (char8 ')')
+
+exprP' :: Parser Expr
+exprP' = withSpace $ AB.choice [
     intExprP
   , identExprP
   , binaryExprP
