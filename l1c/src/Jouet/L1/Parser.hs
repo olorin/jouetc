@@ -2,14 +2,15 @@
 {-# OPTIONS_GHC -funbox-strict-fields #-}
 
 module Jouet.L1.Parser (
-    binOpP
-  , assnOpP
-  , identP
-  , exprP
-  , lvalueP
-  , assnP
-  , declP
+    programP
   , stmtP
+  , declP
+  , assnP
+  , lvalueP
+  , exprP
+  , identP
+  , assnOpP
+  , binOpP
   ) where
 
 import           Data.Attoparsec.ByteString (Parser, string)
@@ -21,6 +22,14 @@ import qualified Data.ByteString as BS
 import           Jouet.L1.Grammar
 import           Jouet.L1.Parser.Helper
 import           Jouet.L1.Parser.Predicate
+
+programP :: Parser Program
+programP = Program <$> (
+     withSpace (string "int")
+  *> withSpace (string "main")
+  *> withSpace (char8 '{')
+  *> AB.many' stmtP
+  <* withSpace (char8 '}'))
 
 stmtP :: Parser Stmt
 stmtP = withSpace $ stmtP' <* char8 ';'
