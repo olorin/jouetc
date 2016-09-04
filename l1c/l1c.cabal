@@ -19,6 +19,7 @@ library
                        Jouet.L1.Parser
                        Jouet.L1.Parser.Helper
                        Jouet.L1.Parser.Predicate
+                       Jouet.L1.Render
 
   build-depends:       base >= 3 && < 5
                      , attoparsec >= 0.10 && < 0.14
