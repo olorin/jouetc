@@ -8,6 +8,7 @@ module Jouet.L1.Parser (
   , exprP
   , lvalueP
   , assnP
+  , declP
   ) where
 
 import           Data.Attoparsec.ByteString (Parser, string)
@@ -29,8 +30,25 @@ withParens p =
   *> p
   <* withSpace (char8 ')')
 
+declP :: Parser Decl
+declP = withSpace $ AB.choice [
+    fullDeclP
+  , emptyDeclP
+  ]
+
+fullDeclP :: Parser Decl
+fullDeclP =
+  IntDecl
+    <$> (withSpace (string "int") *> withSpace identP)
+    <*> (Just <$> ((char8 '=') *> exprP))
+
+emptyDeclP :: Parser Decl
+emptyDeclP = (flip IntDecl Nothing) <$> (
+     withSpace (string "int")
+  *> identP)
+
 assnP :: Parser Assn
-assnP = Assn <$> identP <*> assnOpP <*> exprP
+assnP = Assn <$> lvalueP <*> assnOpP <*> exprP
 
 lvalueP :: Parser Ident
 lvalueP = withSpace $ AB.choice [
