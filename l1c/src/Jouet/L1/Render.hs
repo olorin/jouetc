@@ -21,7 +21,9 @@ import           Data.Monoid ((<>))
 import           Jouet.L1.Grammar
 
 renderProgram :: Program -> ByteString
-renderProgram (Program ss) = BS.intercalate "\n" $ renderStmt <$> ss
+renderProgram (Program ss) =
+  BS.intercalate "\n" $
+    ["int main {"] <> (renderStmt <$> ss) <> ["}"]
 
 renderStmt :: Stmt -> ByteString
 renderStmt (DeclS s) = renderDecl s <> ";"
