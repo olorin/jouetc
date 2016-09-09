@@ -54,7 +54,7 @@ renderExpr (BinE e1 o e2) = BS.intercalate " " [
   , renderBinOp o
   , renderExpr e2
   ]
-renderExpr (NegE expr) = "-" <> renderExpr expr
+renderExpr (NegE expr) = "-(" <> renderExpr expr <> ")"
 
 renderIdent :: Ident -> ByteString
 renderIdent (Ident x) = x
