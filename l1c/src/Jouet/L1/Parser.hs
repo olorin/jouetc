@@ -13,7 +13,7 @@ module Jouet.L1.Parser (
   , binOpP
   ) where
 
-import           Data.Attoparsec.ByteString (Parser, string)
+import           Data.Attoparsec.ByteString (Parser, (<?>), string)
 import qualified Data.Attoparsec.ByteString as AB
 import           Data.Attoparsec.ByteString.Char8 (char8, decimal, hexadecimal)
 
@@ -32,7 +32,7 @@ programP = Program <$> (
   <* withSpace (char8 '}'))
 
 stmtP :: Parser Stmt
-stmtP = withSpace $ stmtP' <* char8 ';'
+stmtP = (withSpace $ stmtP' <* char8 ';') <?> "stmtP"
 
 stmtP' :: Parser Stmt
 stmtP' = withSpace $ AB.choice [
@@ -42,10 +42,10 @@ stmtP' = withSpace $ AB.choice [
   ]
 
 declP :: Parser Decl
-declP = withSpace $ AB.choice [
+declP = (withSpace $ AB.choice [
     fullDeclP
   , emptyDeclP
-  ]
+  ]) <?> "declP"
 
 fullDeclP :: Parser Decl
 fullDeclP =
@@ -59,19 +59,19 @@ emptyDeclP = (flip IntDecl Nothing) <$> (
   *> identP)
 
 assnP :: Parser Assn
-assnP = Assn <$> lvalueP <*> assnOpP <*> exprP
+assnP = Assn <$> lvalueP <*> assnOpP <*> exprP <?> "assnP"
 
 lvalueP :: Parser Ident
-lvalueP = withSpace $ AB.choice [
+lvalueP = (withSpace $ AB.choice [
     identP
   , withParens identP
-  ]
+  ]) <?> "lvalueP"
 
 exprP :: Parser Expr
-exprP = withSpace $ AB.choice [
+exprP = (withSpace $ AB.choice [
     exprP'
   , withParens exprP'
-  ]
+  ]) <?> "exprP"
 
 exprP' :: Parser Expr
 exprP' = withSpace $ AB.choice [
@@ -91,7 +91,7 @@ identExprP :: Parser Expr
 identExprP = IdentE <$> identP
 
 intExprP :: Parser Expr
-intExprP = IntE <$> (AB.choice [hexInt, decimal])
+intExprP = IntE <$> (AB.choice [hexInt, decimal]) <?> "intExprP"
 
 hexInt :: Parser Int
 hexInt = string "0x" *> hexadecimal
@@ -100,6 +100,7 @@ identP :: Parser Ident
 identP =
   Ident
     <$> (BS.cons <$> AB.satisfy identHead <*> AB.takeWhile identTail)
+    <?> "identP"
 
 assnOpP :: Parser AssnOp
 assnOpP = AB.choice [
@@ -109,7 +110,7 @@ assnOpP = AB.choice [
   , string "/=" *> pure OpDivEq
   , string "%=" *> pure OpModEq
   , char8  '='  *> pure OpEq
-  ]
+  ] <?> "assnOpP"
 
 binOpP :: Parser BinOp
 binOpP = AB.choice [
@@ -118,4 +119,4 @@ binOpP = AB.choice [
   , char8 '*' *> pure OpMul
   , char8 '/' *> pure OpDiv
   , char8 '%' *> pure OpMod
-  ]
+  ] <?> "binOpP"
