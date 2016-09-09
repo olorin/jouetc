@@ -35,11 +35,18 @@ genDecl =
     <*> (oneof [pure Nothing, Just <$> genExpr])
 
 genExpr :: Gen Expr
-genExpr = oneof [
+genExpr = sized genExpr'
+
+genExpr' :: Int -> Gen Expr
+genExpr' 0 = oneof [
     IntE <$> choose (0, (2^32) - 1)
   , IdentE <$> genIdent
-  , BinE <$> genExpr <*> genBinOp <*> genExpr
-  , NegE <$> genExpr
+  ]
+genExpr' n = oneof [
+    IntE <$> choose (0, (2^32) - 1)
+  , IdentE <$> genIdent
+  , BinE <$> genExpr' (n - 1) <*> genBinOp <*> genExpr' (n - 1)
+  , NegE <$> genExpr' (n - 1)
   ]
     
 genIdent :: Gen Ident
