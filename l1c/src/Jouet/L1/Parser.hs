@@ -75,10 +75,10 @@ exprP = (withSpace $ AB.choice [
 
 exprP' :: Parser Expr
 exprP' = withSpace $ AB.choice [
-    intExprP
-  , identExprP
-  , binaryExprP
+    binaryExprP
   , negativeExprP
+  , identExprP
+  , intExprP
   ]
 
 negativeExprP :: Parser Expr
